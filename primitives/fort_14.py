@@ -74,6 +74,9 @@ class Fort14:
             assert sum(bdry["nodes"].size for bdry in self.land_boundaries) == \
                 total_number_of_land_boundary_nodes
 
+    def get_number_open_boundary_nodes(self):
+        return sum(len(arr) for arr in self.open_boundaries)
+
     def summarize(self):
         print "Mesh description: {}".format(self.agrid)
         print "Number of nodes: {:d}".format(self.number_nodes)

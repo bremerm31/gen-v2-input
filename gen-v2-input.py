@@ -1,6 +1,7 @@
 import argparse
 
 from primitives.fort_14 import Fort14
+from primitives.fort_15 import Fort15
 
 def generate_v2_input(fort14,fort15,fortdg,v2_input_file):
     v2_input_file.write('################################')
@@ -23,6 +24,17 @@ if __name__=="__main__":
                         default=open('dgswemv2_input.15','w'))
     args = parser.parse_args()
 
+    print 60*"#"
+    print "Reading in fort.14"
+    print 60*"#"
     fort14 = Fort14(args.fort14)
     fort14.summarize()
+    print ""
+    print 60*"#"
+    print "Reading in fort.15"
+    print 60*"#"
+    fort15 = Fort15(args.fort15, fort14.get_number_open_boundary_nodes())
+    fort15.summarize()
+    print ""
+
     generate_v2_input("14","15","dg",args.outfile)
