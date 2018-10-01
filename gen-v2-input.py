@@ -2,6 +2,7 @@ import argparse
 
 from primitives.fort_14 import Fort14
 from primitives.fort_15 import Fort15
+from primitives.fort_dg import FortDG
 
 def generate_v2_input(fort14,fort15,fortdg,v2_input_file):
     v2_input_file.write('################################')
@@ -12,7 +13,7 @@ if __name__=="__main__":
                         help="ADCIRC-formatted mesh file",
                         type=str)
     parser.add_argument("fort15",
-                        help="ADCIRC model parameter and periodic boundary condition file",
+                        help="ADCIRC model parameters and periodic boundary conditions",
                         type=str)
     parser.add_argument("fortdg",
                         help="dgswem discontinuous Galerkin input file",
@@ -36,5 +37,10 @@ if __name__=="__main__":
     fort15 = Fort15(args.fort15, fort14.get_number_open_boundary_nodes())
     fort15.summarize()
     print ""
+    print 60*"#"
+    print "Reading in fort.dg"
+    print 60*"#"
+    fortdg = FortDG(args.fortdg)
+    fortdg.summarize()
 
     generate_v2_input("14","15","dg",args.outfile)
