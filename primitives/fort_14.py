@@ -3,11 +3,15 @@ import numpy as np
 
 class BoundaryTypes:
     land = 0
+    tide = 1
+    flow = 2
     weir = 24
 
 class Fort14:
     def __init__(self,fname):
         assert os.path.isfile(fname)
+
+        self.filename = os.path.abspath(fname)
 
         with open(fname,'r') as f:
             self.agrid = f.readline().strip()
@@ -25,7 +29,7 @@ class Fort14:
             self.open_boundaries = []
             for _ in range(number_of_open_boundaries):
                 num_nodes = int(f.readline().split()[0])
-                self.open_boundaries.append(np.empty(num_nodes))
+                self.open_boundaries.append(np.empty(num_nodes,dtype=int))
 
                 for i in range(num_nodes):
                     self.open_boundaries[-1][i] = int(f.readline().strip())
@@ -51,7 +55,7 @@ class Fort14:
                     self.land_boundaries.append({ "type": BoundaryTypes.land,
                                                   "nodes": nodes})
                 elif b_type == BoundaryTypes.weir:
-                    nodes = np.empty((num_nodes,2)) #front nodes
+                    nodes = np.empty((num_nodes,2),dtype=int) #front nodes
                     heights = np.empty(num_nodes)
                     #Coefficient of free surface sub(super)-critical flow
                     cfsbp = np.empty((num_nodes,2))
@@ -66,7 +70,7 @@ class Fort14:
                     self.land_boundaries.append({ "type": BoundaryTypes.weir,
                                                   "nodes": nodes,
                                                   "heights": heights,
-                                                  "coefficient_of_free_surface_flow": cfsbp })
+                                                  "coeff_of_free_surface_flow": cfsbp })
                 else:
                     print "FATAL ERROR!!! Unknown land boundary type {:d}".format(b_type)
 
@@ -78,6 +82,8 @@ class Fort14:
         return sum(len(arr) for arr in self.open_boundaries)
 
     def summarize(self):
+        print "File located at: {}".format(self.filename)
+        print ""
         print "Mesh description: {}".format(self.agrid)
         print "Number of nodes: {:d}".format(self.number_nodes)
         print "Number of elements: {:d}".format(self.number_elements)

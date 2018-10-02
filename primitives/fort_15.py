@@ -3,6 +3,7 @@ import numpy as np
 
 class Tide:
     def __init__(self):
+        self.tag = ""
         self.amig = 0.0
         self.ff = 0.0
         self.fface = 0.0
@@ -49,7 +50,7 @@ class Fort15:
 
             _ = f.readline() #more gwce terms
 
-            self.h0 = np.float64(f.readline().split()[0])
+            self.h_o = np.float64(f.readline().split()[0])
 
             self.slam0, self.sfea0,_ = f.readline().split(None,2)
             self.slam0 = np.float64(self.slam0)
@@ -67,24 +68,22 @@ class Fort15:
             assert self.ntif == 0
 
             self.nbfr = int(f.readline().split()[0])
-            self.tides = {}
+            self.tides = [Tide()]*self.nbfr
             for i in range(self.nbfr):
-                tag = f.readline().split()[0]
-                self.tides[tag] = Tide()
+                self.tides[i].tag = f.readline().split()[0]
                 line = f.readline().split()
-
-                self.tides[tag].amig  = np.float64(line[0])
-                self.tides[tag].ff    = np.float64(line[1])
-                self.tides[tag].fface = np.float64(line[2])
+                self.tides[i].amig  = np.float64(line[0])
+                self.tides[i].ff    = np.float64(line[1])
+                self.tides[i].fface = np.float64(line[2])
 
             for i in range(self.nbfr):
-                tag = f.readline().split()[0]
-                self.tides[tag].emo = np.empty(num_open_boundary_nodes)
-                self.tides[tag].efa = np.empty(num_open_boundary_nodes)
+                assert self.tides[i].tag == f.readline().split()[0]
+                self.tides[i].emo = np.empty(num_open_boundary_nodes)
+                self.tides[i].efa = np.empty(num_open_boundary_nodes)
                 for j in range(num_open_boundary_nodes):
                     line = f.readline().split()
-                    self.tides[tag].emo[i] = np.float64(line[0])
-                    self.tides[tag].efa[i] = np.float64(line[1])
+                    self.tides[i].emo[j] = np.float64(line[0])
+                    self.tides[i].efa[j] = np.float64(line[1])
 
     def summarize(self):
         print "Run description: {}".format(self.rundes)
@@ -108,6 +107,12 @@ class Fort15:
             print "  with no ramping of source terms"
         else:
             print "  and a ramp duration of {:.4f} days".format(self.nramp)
+
+        print ""
+        if self.nolifa == 2:
+            print "The simulation has wetting and drying with h_o {:.2f}".format(self.h_o)
+        else:
+            print "The simulation assumes all elements remain wet"
 
         #Print out all friction information
 
