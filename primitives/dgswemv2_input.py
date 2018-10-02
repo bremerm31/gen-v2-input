@@ -24,6 +24,9 @@ class DGSWEMv2Input:
         if fort15.nramp > 0:
             self.timestepping_node["ramp_duration"] = float(fort15.ramp_duration)
 
+        self.timestepping_node["nstages"] = fortdg.rk_stage
+        self.timestepping_node["order"]   = fortdg.rk_order
+
         self.polynomial_order = fortdg.p
 
         self.problem_node = {'name' : 'swe'}

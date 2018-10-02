@@ -29,14 +29,14 @@ def writeBCIS(fort14,fort15):
 
     for bdry in fort14.land_boundaries:
         if bdry["type"] == BoundaryTypes.weir:
-            f.write("{:d} {:d}".format(BoundaryTypes.weir,
-                                       bdry["nodes"].shape[0]))
+            f.write("{:d} {:d}\n".format(129,
+                                         bdry["nodes"].shape[0]))
             for n in range(bdry["nodes"].shape[0]):
-                f.write("{:d} {:d} {:23.16f} {:23.16f} {:23.16f}".format(bdry["nodes"][n][0],
-                                                                         bdry["nodes"][n][1],
-                                                                         bdry["heights"][n],
-                                                                         bdry["coeff_of_free_surface_flow"][n][0],
-                                                                         bdry["coeff_of_free_surface_flow"][n][1]))
+                f.write("{:d} {:d} {:23.16f} {:23.16f} {:23.16f}\n".format(bdry["nodes"][n][0],
+                                                                           bdry["nodes"][n][1],
+                                                                           bdry["heights"][n],
+                                                                           bdry["coeff_of_free_surface_flow"][n][0],
+                                                                           bdry["coeff_of_free_surface_flow"][n][1]))
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser(description="Given dgswem input, generate input for dgswem-v2.")
