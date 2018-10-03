@@ -6,6 +6,7 @@ class BoundaryTypes:
     tide = 1
     flow = 2
     weir = 24
+    island = 1
 
 class Fort14:
     def __init__(self,fname):
@@ -43,9 +44,9 @@ class Fort14:
             total_number_of_land_boundary_nodes = int(f.readline().split()[0])
 
             for _ in range(number_of_land_boundaries):
-                num_nodes,b_type,__ = f.readline().split(None,2)
-                num_nodes = int(num_nodes)
-                b_type = int(b_type)
+                line = f.readline().split()
+                num_nodes = int(line[0])
+                b_type = int(line[1])
 
                 if b_type == BoundaryTypes.land:
                     nodes = np.empty(num_nodes)
@@ -54,6 +55,14 @@ class Fort14:
 
                     self.land_boundaries.append({ "type": BoundaryTypes.land,
                                                   "nodes": nodes})
+                elif b_type == BoundaryTypes.island:
+                    nodes = np.empty(num_nodes)
+                    for i in range(num_nodes):
+                        nodes[i] = int(f.readline().split()[0])
+
+                    self.land_boundaries.append({"type" : BoundaryTypes.island,
+                                                 "nodes": nodes})
+
                 elif b_type == BoundaryTypes.weir:
                     nodes = np.empty((num_nodes,2),dtype=int) #front nodes
                     heights = np.empty(num_nodes)

@@ -68,8 +68,9 @@ class Fort15:
             assert self.ntif == 0
 
             self.nbfr = int(f.readline().split()[0])
-            self.tides = [Tide()]*self.nbfr
+            self.tides = []
             for i in range(self.nbfr):
+                self.tides.append(Tide())
                 self.tides[i].tag = f.readline().split()[0]
                 line = f.readline().split()
                 self.tides[i].amig  = np.float64(line[0])

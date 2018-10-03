@@ -35,8 +35,7 @@ class DGSWEMv2Input:
         if fort15.nolifa == 2:
             self.problem_node["wetting_drying"] = { "h_o" : float(fort15.h_o) }
 
-    def dump(self,outname):
-        f = file(outname,'w')
+    def dump(self,f):
         f.write(60*"#"+'\n')
         f.write("#\n")
         f.write("#  dgswem-v2 input\n")

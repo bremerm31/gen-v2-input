@@ -75,6 +75,6 @@ if __name__=="__main__":
     fortdg.summarize()
 
     v2_input = DGSWEMv2Input(fort14,fort15,fortdg)
-    v2_input.dump("dgswemv2_input.15")
+    v2_input.dump(args.outfile)
 
     writeBCIS(fort14,fort15)
